@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-06-01",
+  "currency": "TRY",
+  "unitsPerPack": 20,
+  "entries": [
+    { "brand": "Ekonomik marka", "pricePerPack": 105 },
+    { "brand": "Popüler marka", "pricePerPack": 115 },
+    { "brand": "Orta segment", "pricePerPack": 140 },
+    { "brand": "Üst segment", "pricePerPack": 200 },
+    { "brand": "Premium / ithal", "pricePerPack": 285 },
+    { "brand": "Sarmalık (tütün)", "pricePerPack": 70 },
+    { "brand": "Diğer / bilmiyorum", "pricePerPack": 115 }
+  ]
+}

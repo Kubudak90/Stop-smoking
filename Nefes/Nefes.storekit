@@ -1,0 +1,69 @@
+{
+  "identifier" : "NEFES-STOREKIT-CONFIG",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "",
+    "_developerTeamID" : "",
+    "_lastSynchronizedDate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "NEFES_PREMIUM_GROUP",
+      "localizations" : [],
+      "name" : "Nefes Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "699.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "NEFES_YEARLY",
+          "introductoryOffer" : {
+            "internalID" : "NEFES_YEARLY_TRIAL",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
+          "localizations" : [
+            {
+              "description" : "Tüm program, Craving SOS, tetikleyici yönetimi ve tam iyileşme takvimi",
+              "displayName" : "Yıllık Premium",
+              "locale" : "tr_TR"
+            }
+          ],
+          "productID" : "com.nefes.app.premium.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Nefes Premium Yıllık",
+          "subscriptionGroupID" : "NEFES_PREMIUM_GROUP",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "149.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "NEFES_MONTHLY",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Aylık Nefes Premium",
+              "displayName" : "Aylık Premium",
+              "locale" : "tr_TR"
+            }
+          ],
+          "productID" : "com.nefes.app.premium.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Nefes Premium Aylık",
+          "subscriptionGroupID" : "NEFES_PREMIUM_GROUP",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
