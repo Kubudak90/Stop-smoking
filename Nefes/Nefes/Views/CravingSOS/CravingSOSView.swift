@@ -168,11 +168,12 @@ struct BreathingExercise: View {
     @State private var scale: CGFloat = 0.5
     @State private var instruction = "Hazır ol"
     @State private var roundsLeft = 4
-    @State private var running = false
+    @State private var cycle: Task<Void, Never>?
 
     private let inhale: Double = 4
     private let hold: Double = 4
     private let exhale: Double = 6
+    private let totalRounds = 4
 
     var body: some View {
         VStack(spacing: 36) {
@@ -197,29 +198,44 @@ struct BreathingExercise: View {
                 .foregroundStyle(.white.opacity(0.85))
             Spacer()
         }
-        .onAppear { if !running { running = true; startRound() } }
+        // Task tabanlı döngü: sheet kapanınca .onDisappear iptal eder; böylece onFinish
+        // ekran kapandıktan sonra ATEŞLENMEZ ve zamanlayıcı sızmaz.
+        .onAppear {
+            guard cycle == nil else { return }
+            cycle = Task { await runCycle() }
+        }
+        .onDisappear {
+            cycle?.cancel()
+            cycle = nil
+        }
     }
 
-    private func startRound() {
-        guard roundsLeft > 0 else {
-            instruction = "Harika"
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { onFinish() }
-            return
+    @MainActor
+    private func runCycle() async {
+        func sleep(_ seconds: Double) async -> Bool {
+            (try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))) != nil && !Task.isCancelled
         }
 
-        instruction = "Burnundan yavaşça al"
-        withAnimation(.easeInOut(duration: inhale)) { scale = 1.0 }
+        for round in 0..<totalRounds {
+            if Task.isCancelled { return }
+            roundsLeft = totalRounds - round
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + inhale) {
+            instruction = "Burnundan yavaşça al"
+            withAnimation(.easeInOut(duration: inhale)) { scale = 1.0 }
+            guard await sleep(inhale) else { return }
+
             instruction = "Tut"
-            DispatchQueue.main.asyncAfter(deadline: .now() + hold) {
-                instruction = "Ağzından yavaşça ver"
-                withAnimation(.easeInOut(duration: exhale)) { scale = 0.5 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + exhale) {
-                    roundsLeft -= 1
-                    startRound()
-                }
-            }
+            guard await sleep(hold) else { return }
+
+            instruction = "Ağzından yavaşça ver"
+            withAnimation(.easeInOut(duration: exhale)) { scale = 0.5 }
+            guard await sleep(exhale) else { return }
         }
+
+        if Task.isCancelled { return }
+        roundsLeft = 0
+        instruction = "Harika"
+        guard await sleep(1) else { return }
+        onFinish()
     }
 }

@@ -38,6 +38,7 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var selectedProductID = StoreManager.ProductID.yearly
+    @State private var restoreMessage: String?
 
     var body: some View {
         ScrollView {
@@ -119,10 +120,23 @@ struct PaywallView: View {
     private var planSelector: some View {
         VStack(spacing: 10) {
             if store.products.isEmpty {
-                // StoreKit ürünleri yüklenmediğinde (örn. config eksik) bilgilendirici metin.
-                Text("Abonelik seçenekleri yükleniyor…")
-                    .font(.caption)
-                    .foregroundStyle(Theme.textSecondary)
+                if store.lastError != nil {
+                    // Yükleme başarısız: kullanıcı sonsuza dek "yükleniyor" görmesin.
+                    VStack(spacing: 8) {
+                        Text("Abonelik seçenekleri yüklenemedi.")
+                            .font(.caption)
+                            .foregroundStyle(Theme.textSecondary)
+                        Button("Tekrar dene") {
+                            Task { store.lastError = nil; await store.loadProducts() }
+                        }
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Theme.primary)
+                    }
+                } else {
+                    Text("Abonelik seçenekleri yükleniyor…")
+                        .font(.caption)
+                        .foregroundStyle(Theme.textSecondary)
+                }
             }
             ForEach(store.products) { product in
                 PlanRow(
@@ -158,10 +172,26 @@ struct PaywallView: View {
             .disabled(store.purchaseInFlight || store.products.isEmpty)
 
             Button("Satın alımları geri yükle") {
-                Task { await store.restorePurchases(); if store.isPremium { dismiss() } }
+                Task {
+                    restoreMessage = nil
+                    store.lastError = nil   // bayat hata "geri yüklenecek yok" mesajını bastırmasın
+                    await store.restorePurchases()
+                    if store.isPremium {
+                        dismiss()
+                    } else if store.lastError == nil {
+                        // Geri yükleme sessizce "başarılı" ama abonelik yoksa bilgilendir.
+                        restoreMessage = "Geri yüklenecek aktif bir abonelik bulunamadı."
+                    }
+                }
             }
             .font(.caption)
             .foregroundStyle(Theme.textSecondary)
+
+            if let restoreMessage {
+                Text(restoreMessage)
+                    .font(.caption2)
+                    .foregroundStyle(Theme.textSecondary)
+            }
         }
     }
 
@@ -249,7 +279,7 @@ private extension Product.SubscriptionPeriod.Unit {
     func localizedTrial(_ count: Int) -> String {
         switch self {
         case .day: return "\(count) gün"
-        case .week: return "\(count * 7) gün"
+        case .week: return count == 1 ? "1 hafta" : "\(count) hafta"
         case .month: return "\(count) ay"
         case .year: return "\(count) yıl"
         @unknown default: return "\(count) gün"

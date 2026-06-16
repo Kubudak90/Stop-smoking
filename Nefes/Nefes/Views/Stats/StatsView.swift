@@ -48,7 +48,7 @@ struct StatsView: View {
             StatCard(icon: "flame.fill", title: "Temiz seri", value: "\(stats.cleanStreakDays) gün", tint: Theme.primary)
             StatCard(icon: "smoke.fill", title: "İçilmeyen", value: AppFormatters.count(stats.unitsNotConsumed), tint: Theme.primaryDark)
             StatCard(icon: "turkishlirasign.circle.fill", title: "Biriken", value: AppFormatters.money(stats.moneySaved), tint: Theme.accent)
-            StatCard(icon: "arrow.uturn.backward", title: "Kayma sayısı", value: "\(slips.count)", tint: Theme.danger)
+            StatCard(icon: "arrow.uturn.backward", title: "Kayma sayısı", value: "\(stats.slipCountSinceQuit)", tint: Theme.danger)
         }
     }
 

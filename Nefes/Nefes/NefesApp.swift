@@ -14,7 +14,15 @@ struct NefesApp: App {
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
-            fatalError("ModelContainer oluşturulamadı: \(error)")
+            // Kalıcı depo açılamadı (ör. şema uyumsuzluğu, bozuk/dolu disk). Çökmek ve tüm
+            // oturumu öldürmek yerine bellek-içi depoya düşüyoruz: uygulama çalışır kalır
+            // (bu oturumda kayıt kalıcı olmaz). Diskteki veri silinmez, yalnızca yüklenmez.
+            print("[Nefes] Kalıcı ModelContainer açılamadı, bellek-içi depoya düşülüyor: \(error)")
+            let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+            if let memoryContainer = try? ModelContainer(for: schema, configurations: [fallback]) {
+                return memoryContainer
+            }
+            fatalError("Bellek-içi ModelContainer bile oluşturulamadı: \(error)")
         }
     }()
 
@@ -26,6 +34,12 @@ struct NefesApp: App {
                 .environmentObject(env.notifications)
                 .environmentObject(env.prices)
                 .tint(Theme.primary)
+                // Nefes paleti tek bir açık tema üzerine kurulu (Theme.background/surface
+                // sabit açık renkler). Sistem koyu moddayken renk belirtilmeyen metinler
+                // beyaza döner ve açık zeminde okunmaz olur. Tüm uygulamayı (sheet'ler ve
+                // Form'lar dahil) açık görünüme sabitleyerek kontrastı garanti altına alıyoruz.
+                // (Tam koyu-mod desteği için ayrı bir koyu palet gerekir — Faz 2.)
+                .preferredColorScheme(.light)
                 .task { await env.bootstrap() }
         }
         .modelContainer(modelContainer)

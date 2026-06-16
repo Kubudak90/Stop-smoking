@@ -21,11 +21,13 @@ final class StoreManager: ObservableObject {
     @Published private(set) var purchaseInFlight = false
     @Published var lastError: String?
 
-    /// Geliştirme/önizleme için premium'u elle açmaya yarar (StoreKit yokken).
-    /// Üretimde gerçek entitlement bunu ezer.
+#if DEBUG
+    /// Yalnızca DEBUG: geliştirme/önizleme için premium'u elle açar (StoreKit yokken).
+    /// Release derlemesine HİÇ girmez — entitlement bypass'ı üretime sızamaz.
     @Published var debugOverridePremium = false {
         didSet { recomputeEntitlement() }
     }
+#endif
 
     private var updatesTask: Task<Void, Never>?
     private var hasEntitlement = false
@@ -68,7 +70,11 @@ final class StoreManager: ObservableObject {
                 await transaction.finish()
                 await refreshEntitlements()
                 return isPremium
-            case .userCancelled, .pending:
+            case .userCancelled:
+                return false
+            case .pending:
+                // Ask to Buy / SCA gibi onay bekleyen durum — başarısızlık değil.
+                lastError = "Satın alma onay bekliyor. Onaylandığında Premium otomatik açılacak."
                 return false
             @unknown default:
                 return false
@@ -102,7 +108,11 @@ final class StoreManager: ObservableObject {
     }
 
     private func recomputeEntitlement() {
+        #if DEBUG
         isPremium = hasEntitlement || debugOverridePremium
+        #else
+        isPremium = hasEntitlement
+        #endif
     }
 
     private func listenForTransactions() -> Task<Void, Never> {

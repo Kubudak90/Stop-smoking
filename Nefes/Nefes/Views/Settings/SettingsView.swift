@@ -13,10 +13,10 @@ struct SettingsView: View {
     @EnvironmentObject private var store: StoreManager
     @EnvironmentObject private var notifications: NotificationManager
     @EnvironmentObject private var prices: PriceCatalog
-    @Query private var slips: [SlipRecord]
 
     @State private var showPaywall = false
     @State private var showDeleteConfirm = false
+    @State private var deleteError: String?
     @Environment(\.openURL) private var openURL
 
     var body: some View {
@@ -39,6 +39,11 @@ struct SettingsView: View {
                 Button("Vazgeç", role: .cancel) {}
             } message: {
                 Text("Profilin, kayma kayıtların ve tüm ilerlemen kalıcı olarak silinir. Bu işlem geri alınamaz.")
+            }
+            .alert("Silme başarısız", isPresented: Binding(get: { deleteError != nil }, set: { if !$0 { deleteError = nil } })) {
+                Button("Tamam", role: .cancel) { deleteError = nil }
+            } message: {
+                Text(deleteError ?? "")
             }
         }
     }
@@ -122,7 +127,7 @@ struct SettingsView: View {
                 Button("Bildirimlere izin ver") {
                     Task {
                         await notifications.requestAuthorization()
-                        await notifications.reschedule(for: profile)
+                        await notifications.reschedule(for: profile, isPremium: store.isPremium)
                     }
                 }
             } else if notifications.authorizationStatus == .denied {
@@ -155,6 +160,12 @@ struct SettingsView: View {
             Text("Verilerin yalnızca bu cihazda tutulur. Hiçbir sağlık verin sunucuya gönderilmez.")
                 .font(.caption)
                 .foregroundStyle(Theme.textSecondary)
+            Link(destination: OnboardingView.privacyPolicyURL) {
+                Label("Gizlilik Politikası", systemImage: "hand.raised.fill")
+            }
+            Link(destination: OnboardingView.termsOfUseURL) {
+                Label("Kullanım Şartları", systemImage: "doc.text.fill")
+            }
             Button(role: .destructive) {
                 showDeleteConfirm = true
             } label: {
@@ -195,7 +206,7 @@ struct SettingsView: View {
         Binding(get: { profile.quitDate }, set: { newValue in
             profile.quitDate = newValue
             save()
-            Task { await notifications.reschedule(for: profile) }
+            Task { await notifications.reschedule(for: profile, isPremium: store.isPremium) }
         })
     }
 
@@ -210,11 +221,17 @@ struct SettingsView: View {
     private func save() { try? context.save() }
 
     private func deleteAllData() {
-        for slip in slips { context.delete(slip) }
-        context.delete(profile)
-        try? context.save()
+        // KVKK §17: "tüm verilerimi sil" GERÇEKTEN her şeyi silmeli — yalnızca aktif profili
+        // ve görünümdeki kaymaları değil, depodaki TÜM profilleri ve kayma kayıtlarını.
+        do {
+            try context.delete(model: SlipRecord.self)
+            try context.delete(model: UserProfile.self)
+            try context.save()
+        } catch {
+            deleteError = "Veriler silinirken bir hata oluştu: \(error.localizedDescription)"
+            return
+        }
         notifications.cancelAll()
-        env.hasSeenPostOnboardingPaywall = false
-        env.hasUsedCravingSOS = false
+        env.resetLocalFlags()   // cihazdaki davranışsal bayrakları da temizle
     }
 }

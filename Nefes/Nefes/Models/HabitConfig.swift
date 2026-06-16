@@ -30,6 +30,10 @@ struct HabitConfig: Identifiable, Hashable {
     /// Her bir birimin geri kazandırdığı dakika (sigara ≈ 11 dk). Spec §10 "kazanılan ömür".
     let lifeRegainedMinutesPerUnit: Double
 
+    /// Esnek seri (streak-freeze) penceresi — saat. Spec §5: tek/izole bir kayma seriyi
+    /// BOZMAZ; seri yalnızca bu pencere içinde art arda kaymalar olursa (nüks) kırılır.
+    let streakGraceHours: Double
+
     /// Sigaraya özel iyileşme takvimi. Spec §6.
     let healthMilestones: [HealthMilestone]
 

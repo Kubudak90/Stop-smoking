@@ -34,4 +34,13 @@ final class AppEnvironment: ObservableObject {
         await store.bootstrap()
         await notifications.refreshStatus()
     }
+
+    /// "Tüm verilerimi sil" (KVKK §17) sonrası cihazdaki davranışsal bayrakları da temizler —
+    /// yoksa silme sonrası onboarding'e dönülse de eski bayraklar kalırdı (eksik silme).
+    func resetLocalFlags() {
+        hasUsedCravingSOS = false
+        hasSeenPostOnboardingPaywall = false
+        UserDefaults.standard.removeObject(forKey: Keys.usedSOS)
+        UserDefaults.standard.removeObject(forKey: Keys.seenPaywall)
+    }
 }

@@ -9,6 +9,7 @@ struct OnboardingView: View {
     @Environment(\.modelContext) private var context
     @EnvironmentObject private var prices: PriceCatalog
     @EnvironmentObject private var notifications: NotificationManager
+    @EnvironmentObject private var store: StoreManager
 
     @State private var step = 0
 
@@ -19,8 +20,10 @@ struct OnboardingView: View {
     @State private var brand = "Popüler marka"
     @State private var pricePerPack = 115.0
     @State private var quitDate = Date.now
+    @State private var quitIsNow = true
+    @State private var consentAccepted = false
 
-    private let totalSteps = 4
+    private let totalSteps = 5
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,11 +31,19 @@ struct OnboardingView: View {
                 .tint(Theme.primary)
                 .padding()
 
-            TabView(selection: $step) {
-                reasonsStep.tag(0)
-                consumptionStep.tag(1)
-                quitMomentStep.tag(2)
-                notificationStep.tag(3)
+            TabView(selection: Binding(
+                get: { step },
+                // Rıza verilmeden swipe ile rıza adımını (step 0) atlamayı engelle (KVKK gating).
+                // Buton akışı zaten canProceed ile kilitli; bu, kaydırma jestini de kapatır.
+                set: { newValue in
+                    if newValue > 0, !consentAccepted { step = 0 } else { step = newValue }
+                }
+            )) {
+                consentStep.tag(0)
+                reasonsStep.tag(1)
+                consumptionStep.tag(2)
+                quitMomentStep.tag(3)
+                notificationStep.tag(4)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(.easeInOut, value: step)
@@ -42,6 +53,40 @@ struct OnboardingView: View {
         .background(Theme.background)
         .onAppear {
             if let price = prices.price(forBrand: brand) { pricePerPack = price }
+        }
+    }
+
+    // MARK: - 0. KVKK açık rıza (Spec §17) — hassas sağlık verisi toplanmadan önce
+
+    /// Gizlilik politikası ve kullanım şartları. Yayından önce gerçek URL'lerle değiştirin.
+    static let privacyPolicyURL = URL(string: "https://nefes.app/gizlilik")!
+    static let termsOfUseURL = URL(string: "https://nefes.app/sartlar")!
+
+    private var consentStep: some View {
+        OnboardingScaffold(
+            title: "Gizliliğin bizde emanet",
+            subtitle: "Başlamadan önce kısa ama önemli bir not — bu bir sağlık aracı."
+        ) {
+            VStack(alignment: .leading, spacing: 16) {
+                ConsentBullet(icon: "iphone", text: "Verilerin (sigara kullanımın, kaymaların, ilerlemen) yalnızca bu cihazda saklanır.")
+                ConsentBullet(icon: "lock.shield.fill", text: "Hiçbir sağlık verin sunucuya gönderilmez. Reklam ve üçüncü taraf takip yok.")
+                ConsentBullet(icon: "trash.fill", text: "İstediğin an Ayarlar'dan tüm verini kalıcı olarak silebilirsin.")
+
+                Toggle(isOn: $consentAccepted) {
+                    Text("Sağlık verimin yukarıdaki şekilde, yalnızca cihazımda işlenmesine açık rıza veriyorum (KVKK).")
+                        .font(.footnote)
+                        .foregroundStyle(Theme.textPrimary)
+                }
+                .tint(Theme.primary)
+                .padding(.top, 4)
+
+                HStack(spacing: 16) {
+                    Link("Gizlilik Politikası", destination: Self.privacyPolicyURL)
+                    Link("Kullanım Şartları", destination: Self.termsOfUseURL)
+                }
+                .font(.caption.weight(.medium))
+                .foregroundStyle(Theme.primary)
+            }
         }
     }
 
@@ -108,7 +153,9 @@ struct OnboardingView: View {
                 }
 
                 // Anlık "para psikolojisi" önizlemesi. Spec §7.
-                let yearly = pricePerPack / 20 * Double(unitsPerDay) * 365
+                // Paket başına birim sayısı katalogdan gelir (sabit 20 değil).
+                let unitsPerPack = max(1, prices.data.unitsPerPack)
+                let yearly = pricePerPack / Double(unitsPerPack) * Double(unitsPerDay) * 365
                 Text("Yıllık ≈ \(AppFormatters.money(yearly)) duman olup gidiyor.")
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(Theme.accent)
@@ -127,17 +174,19 @@ struct OnboardingView: View {
             VStack(spacing: 16) {
                 Button {
                     quitDate = .now
+                    quitIsNow = true
                 } label: {
                     Label("Şimdi bırakıyorum", systemImage: "flag.checkered")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(abs(quitDate.timeIntervalSinceNow) < 60 ? Theme.primary.opacity(0.15) : Theme.background)
+                        .background(quitIsNow ? Theme.primary.opacity(0.15) : Theme.surface)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Theme.primary.opacity(quitIsNow ? 0.5 : 0)))
                 }
 
                 DatePicker(
                     "Bırakma anı",
-                    selection: $quitDate,
+                    selection: Binding(get: { quitDate }, set: { quitDate = $0; quitIsNow = false }),
                     in: ...Date.now,
                     displayedComponents: [.date, .hourAndMinute]
                 )
@@ -190,8 +239,15 @@ struct OnboardingView: View {
                 }
             }
             .frame(width: 160)
+            .disabled(!canProceed)
+            .opacity(canProceed ? 1 : 0.5)
         }
         .padding()
+    }
+
+    /// Rıza adımında (step 0) açık rıza verilmeden ilerlenemez (KVKK §17).
+    private var canProceed: Bool {
+        step == 0 ? consentAccepted : true
     }
 
     private func finish() {
@@ -199,19 +255,37 @@ struct OnboardingView: View {
         let trimmed = customReason.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty { reasons.append(trimmed) }
 
+        // Fiyat doğrulama: 0/negatif/boş fiyat → "biriken para" kalıcı 0 olurdu.
+        // Geçersizse katalog fiyatına, o da yoksa makul bir varsayılana düş.
+        let validatedPrice: Double = {
+            if pricePerPack.isFinite, pricePerPack > 0 { return pricePerPack }
+            return prices.price(forBrand: brand) ?? 115
+        }()
+        let unitsPerPack = max(1, prices.data.unitsPerPack)
+
         let profile = UserProfile(
             habitType: .smoking,
             reasons: reasons,
             unitsPerDay: unitsPerDay,
-            pricePerPack: pricePerPack,
-            unitsPerPack: 20,
+            pricePerPack: validatedPrice,
+            unitsPerPack: unitsPerPack,
             brand: brand,
-            quitDate: quitDate
+            quitDate: quitDate,
+            kvkkConsentAt: .now   // rıza adımı geçilmeden buraya gelinemez (canProceed)
         )
         context.insert(profile)
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("[Nefes] Onboarding profili kaydedilemedi: \(error)")
+        }
 
-        Task { await notifications.reschedule(for: profile) }
+        // İzni iste, SONUCU BEKLE, ardından bildirimleri kur. (Eski hali fire-and-forget'ti:
+        // izin verilse bile reschedule yarış nedeniyle çoğu kez hiçbir şey kuramıyordu.)
+        Task {
+            _ = await notifications.requestAuthorization()
+            await notifications.reschedule(for: profile, isPremium: store.isPremium)
+        }
     }
 }
 
@@ -274,5 +348,21 @@ private struct FeatureRow: View {
             Spacer()
         }
         .padding(.vertical, 4)
+    }
+}
+
+private struct ConsentBullet: View {
+    let icon: String
+    let text: String
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .foregroundStyle(Theme.primary)
+                .frame(width: 28)
+            Text(text)
+                .font(.subheadline)
+                .foregroundStyle(Theme.textPrimary)
+            Spacer(minLength: 0)
+        }
     }
 }

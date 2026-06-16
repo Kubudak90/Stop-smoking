@@ -6,10 +6,16 @@ import UserNotifications
 /// BİLDİRİM FELSEFESİ (sessiz koç): destekleyici, azarlamayan, anksiyete üretmeyen.
 /// Asla suçlama, korku pornografisi, agresif hatırlatma. İlk 72 saat en yoğun destek.
 @MainActor
-final class NotificationManager: ObservableObject {
+final class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
     @Published private(set) var authorizationStatus: UNAuthorizationStatus = .notDetermined
 
     private let center = UNUserNotificationCenter.current()
+
+    override init() {
+        super.init()
+        // Uygulama açıkken de bildirim gösterilsin (yoksa foreground'da sessizce düşer).
+        center.delegate = self
+    }
 
     func refreshStatus() async {
         let settings = await center.notificationSettings()
@@ -27,18 +33,25 @@ final class NotificationManager: ObservableObject {
         }
     }
 
-    /// Profil için tüm planlı bildirimleri kurar. Bırakma tarihi değişince yeniden çağrılır.
-    func reschedule(for profile: UserProfile, config: HabitConfig = SmokingHabit.config) async {
-        center.removeAllPendingNotificationRequests()
+    /// Profil için tüm planlı bildirimleri kurar. Bırakma tarihi değişince, izin sonradan
+    /// verildiğinde ve her uygulama açılışında/foreground'da yeniden çağrılır (Spec §12).
+    /// - Parameter isPremium: Premium kilometre taşı içeriği yalnızca premium kullanıcıya
+    ///   tam metinle gönderilir (ücretsiz kullanıcıya teaser) — gating sızıntısını önler.
+    func reschedule(for profile: UserProfile, isPremium: Bool, config: HabitConfig = SmokingHabit.config) async {
+        // ÖNEMLİ: izin yoksa mevcut planı SİLME — sadece çık. (Aksi halde izin verilmeden
+        // çağrılırsa her şeyi temizleyip hiçbir şey kuramazdı.)
         guard authorizationStatus == .authorized || authorizationStatus == .provisional else { return }
+        center.removeAllPendingNotificationRequests()
 
-        scheduleMilestoneCelebrations(for: profile, config: config)
+        scheduleMilestoneCelebrations(for: profile, config: config, isPremium: isPremium)
         scheduleFirst72HourSupport(for: profile)
         scheduleReturnHook(for: profile)
     }
 
     /// Her sağlık kilometre taşı geçilince kutlama. Spec §6, §12 (dopamin döngüsü).
-    private func scheduleMilestoneCelebrations(for profile: UserProfile, config: HabitConfig) {
+    /// Premium kilometre taşının TIBBİ DETAYI yalnızca premium kullanıcıya gönderilir;
+    /// ücretsiz kullanıcı yalnızca kutlama + teaser görür (gating sızıntısı önlenir).
+    private func scheduleMilestoneCelebrations(for profile: UserProfile, config: HabitConfig, isPremium: Bool) {
         let now = Date.now
         for milestone in config.healthMilestones {
             let fireDate = milestone.reachedDate(since: profile.quitDate)
@@ -46,7 +59,9 @@ final class NotificationManager: ObservableObject {
 
             let content = UNMutableNotificationContent()
             content.title = "🌿 \(milestone.title) doldu"
-            content.body = milestone.detail
+            content.body = (milestone.isFreeTier || isPremium)
+                ? milestone.detail
+                : "Bu kilometre taşının ne anlama geldiğini İyileşme Takvimi'nde gör."
             content.sound = .default
 
             schedule(content, at: fireDate, id: "milestone_\(milestone.id)")
@@ -88,15 +103,34 @@ final class NotificationManager: ObservableObject {
     }
 
     private func schedule(_ content: UNNotificationContent, at date: Date, id: String) {
-        let components = Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute, .second], from: date
-        )
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        // Zaman-aralığı tetikleyici: duvar-saati (UNCalendar) yerine "şu andan N saniye sonra"
+        // kullanırız; böylece saat dilimi / yaz saati (DST) değişimlerinde kayma olmaz.
+        let interval = date.timeIntervalSinceNow
+        guard interval > 0 else { return }
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-        center.add(request)
+        center.add(request) { error in
+            if let error { print("[Nefes] Bildirim planlanamadı (\(id)): \(error.localizedDescription)") }
+        }
     }
 
     func cancelAll() {
         center.removeAllPendingNotificationRequests()
+    }
+
+    /// Uygulama öne geldiğinde rozet sayacını sıfırlar (birikmesin).
+    func clearBadge() {
+        center.setBadgeCount(0)
+    }
+
+    // MARK: - UNUserNotificationCenterDelegate
+
+    /// Uygulama açıkken gelen bildirimi de banner + sesle göster (yoksa sessizce yutulurdu).
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound])
     }
 }

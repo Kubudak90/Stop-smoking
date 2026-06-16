@@ -14,6 +14,12 @@ struct QuitStats {
     let nextMilestone: HealthMilestone?
     let progressToNext: Double // 0...1
     let cleanStreakDays: Int
+    /// Esnek seri (Spec §5): yakın zamanda bir kayma kaydedildi ama grace penceresi içinde
+    /// olduğu için seri henüz korunuyor. UI bunu "serin korunuyor 🛡️" olarak gösterir.
+    let streakFrozen: Bool
+    /// Bırakma tarihinden bu yana kaydedilen kayma sayısı (quitDate öncesi kaymalar hariç —
+    /// "Kayma sayısı" göstergesi sayaç matematiğiyle tutarlı olsun diye).
+    let slipCountSinceQuit: Int
 }
 
 enum QuitStatsCalculator {
@@ -58,12 +64,34 @@ enum QuitStatsCalculator {
             progress = 1
         }
 
-        // Temiz seri: son kaymadan bu yana geçen tam günler (kayma varsa oradan, yoksa quitDate'ten).
-        let streakAnchor = slips
+        // Temiz seri — ESNEK SERİ (streak-freeze, Spec §5):
+        // Tek/izole bir kayma seriyi BOZMAZ. Bir kayma yalnızca kendisinden sonra grace
+        // penceresi (config.streakGraceHours) içinde BAŞKA bir kayma gelirse (nüks örüntüsü)
+        // seriyi kırar; seri o kümenin son kaymasından yeniden başlar. Böylece "sert 0'a
+        // döndün" cezası ortadan kalkar (Spec §5 — relapse yönetiminin kalbi).
+        let slipDates = slips
             .filter { $0.date >= profile.quitDate }
             .map(\.date)
-            .max() ?? profile.quitDate
-        let cleanStreakDays = Int(max(0, now.timeIntervalSince(streakAnchor)) / 86_400)
+            .sorted()
+        let graceWindow = TimeInterval.hours(config.streakGraceHours)
+
+        var breakingAnchor = profile.quitDate
+        for i in slipDates.indices {
+            for j in slipDates.index(after: i)..<slipDates.endIndex {
+                let gap = slipDates[j].timeIntervalSince(slipDates[i])
+                // gap >= 0 (sıralı + i<j). Aynı ana denk gelen iki kayma da (gap == 0) nükstür.
+                if gap >= 0, gap <= graceWindow {
+                    breakingAnchor = max(breakingAnchor, slipDates[j])
+                }
+            }
+        }
+        let cleanStreakDays = Int(max(0, now.timeIntervalSince(breakingAnchor)) / 86_400)
+
+        // En son kayma grace penceresi içinde ve seriyi kırmadıysa: seri "korunuyor".
+        let streakFrozen: Bool = {
+            guard let last = slipDates.last else { return false }
+            return now.timeIntervalSince(last) <= graceWindow && last > breakingAnchor
+        }()
 
         return QuitStats(
             elapsed: elapsed,
@@ -74,7 +102,9 @@ enum QuitStatsCalculator {
             currentMilestone: current,
             nextMilestone: next,
             progressToNext: progress,
-            cleanStreakDays: cleanStreakDays
+            cleanStreakDays: cleanStreakDays,
+            streakFrozen: streakFrozen,
+            slipCountSinceQuit: slipDates.count
         )
     }
 }

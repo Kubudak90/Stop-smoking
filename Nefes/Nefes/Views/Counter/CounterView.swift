@@ -28,6 +28,7 @@ struct CounterView: View {
                     elapsedHeader
                     statGrid
                     currentMilestoneCard
+                    MedicalDisclaimer()
                     cravingSOSButton
                     slipButton
                     reasonsReminder
@@ -65,7 +66,12 @@ struct CounterView: View {
                 clockUnit(c.minutes, "dk")
                 clockUnit(c.seconds, "sn")
             }
-            if stats.cleanStreakDays != c.days, stats.cleanStreakDays >= 0 {
+            if stats.streakFrozen {
+                Text("Bir kayma kaydettin — serin korunuyor 🛡️")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.9))
+                    .padding(.top, 2)
+            } else if stats.cleanStreakDays != c.days, stats.cleanStreakDays >= 0 {
                 Text("Güncel temiz seri: \(stats.cleanStreakDays) gün")
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.85))
@@ -124,14 +130,20 @@ struct CounterView: View {
     // MARK: - Mevcut kilometre taşı
 
     private var currentMilestoneCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        // Premium kilometre taşının TIBBİ DETAYI ücretsiz kullanıcıya sızdırılmaz (gating).
+        let milestone = stats.currentMilestone
+        let canSeeDetail = (milestone?.isFreeTier ?? true) || store.isPremium
+        return VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "checkmark.seal.fill").foregroundStyle(Theme.primary)
-                Text(stats.currentMilestone?.title ?? "Yolculuk başladı")
+                Text(milestone?.title ?? "Yolculuk başladı")
                     .font(.headline)
                 Spacer()
+                if milestone != nil, !canSeeDetail {
+                    Image(systemName: "lock.fill").font(.caption).foregroundStyle(Theme.textSecondary)
+                }
             }
-            Text(stats.currentMilestone?.detail ?? "İlk dakikalar bile vücudunda iyileşmeyi başlatıyor.")
+            Text(detailText(for: milestone, canSeeDetail: canSeeDetail))
                 .font(.subheadline)
                 .foregroundStyle(Theme.textSecondary)
 
@@ -148,6 +160,15 @@ struct CounterView: View {
             }
         }
         .card()
+    }
+
+    private func detailText(for milestone: HealthMilestone?, canSeeDetail: Bool) -> String {
+        guard let milestone else {
+            return "İlk dakikalar bile vücudunda iyileşmeyi başlatıyor."
+        }
+        return canSeeDetail
+            ? milestone.detail
+            : "Bu kilometre taşının ne anlama geldiğini görmek için İyileşme Takvimi'ni aç."
     }
 
     // MARK: - Craving SOS — kriz anı butonu (Spec §4, §10.4, §11)

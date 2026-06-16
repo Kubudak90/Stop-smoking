@@ -15,6 +15,7 @@ enum SmokingHabit {
         unitPlural: "sigara",
         unitsPerPack: 20,
         lifeRegainedMinutesPerUnit: 11, // her sigara ≈ 11 dk
+        streakGraceHours: 24,           // izole bir kayma 24 saat içinde toparlanırsa seri korunur (Spec §5)
         healthMilestones: milestones,
         triggerCategories: triggers,
         displayName: "Sigara"
@@ -30,10 +31,17 @@ enum SmokingHabit {
             isFreeTier: true
         ),
         HealthMilestone(
+            id: "m_8h",
+            timeOffset: .hours(8),
+            title: "8 saat",
+            detail: "Kandaki karbonmonoksit seviyesi düşmeye başlar; dokulara daha fazla oksijen taşınır.",
+            isFreeTier: true
+        ),
+        HealthMilestone(
             id: "m_12h",
             timeOffset: .hours(12),
             title: "12 saat",
-            detail: "Kandaki karbonmonoksit seviyesi düşer, oksijen seviyesi normale yaklaşır.",
+            detail: "Kandaki karbonmonoksit normale yaklaşır, oksijen seviyesi yükselir.",
             isFreeTier: true
         ),
         HealthMilestone(

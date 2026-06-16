@@ -33,6 +33,10 @@ final class UserProfile {
     /// Son "hâlâ temizim" check-in'i. Spec §13 retention proxy.
     var lastCleanCheckIn: Date?
 
+    /// KVKK açık rıza zaman damgası (Spec §17). Hassas sağlık verisi toplanmadan önce
+    /// onboarding'de alınır; nil ise rıza henüz verilmemiştir.
+    var kvkkConsentAt: Date?
+
     init(
         habitType: HabitType = .smoking,
         reasons: [String] = [],
@@ -41,7 +45,8 @@ final class UserProfile {
         unitsPerPack: Int = 20,
         brand: String? = nil,
         quitDate: Date = .now,
-        createdAt: Date = .now
+        createdAt: Date = .now,
+        kvkkConsentAt: Date? = nil
     ) {
         self.habitTypeRaw = habitType.rawValue
         self.reasons = reasons
@@ -52,6 +57,7 @@ final class UserProfile {
         self.quitDate = quitDate
         self.createdAt = createdAt
         self.lastCleanCheckIn = nil
+        self.kvkkConsentAt = kvkkConsentAt
     }
 
     var habitType: HabitType {
