@@ -48,8 +48,21 @@ struct CounterView: View {
             .sheet(isPresented: $showPaywall) {
                 PaywallView(context: .postOnboarding, stats: stats)
             }
-            .onAppear(perform: maybeShowPostOnboardingPaywall)
+            .onAppear(perform: onCounterAppear)
         }
+    }
+
+    private func onCounterAppear() {
+        #if DEBUG
+        switch UITestConfig.screen {
+        case .sos: showSOS = true; return
+        case .paywall: showPaywall = true; return
+        case .none: break
+        }
+        // Ekran görüntüsü modunda doğal post-onboarding paywall'ı bastır.
+        if UITestConfig.isActive { return }
+        #endif
+        maybeShowPostOnboardingPaywall()
     }
 
     // MARK: - Geçen süre başlığı (canlı)

@@ -6,8 +6,8 @@ import SwiftUI
 /// ücretsiz; sonraki aşamalar premium (Spec §8). Ayrıca §6 yoksunluk rehberi + NRT/profesyonel
 /// destek bilgisi ve tıbbi sorumluluk reddi burada toplanır.
 ///
-/// İÇERİK NOTU: Aşama/yoksunluk/NRT metinleri `SmokingContent` içinde PLACEHOLDER'dır ve
-/// hekim tarafından doldurulacaktır (Spec §2, §6).
+/// İÇERİK NOTU: Aşama/yoksunluk/NRT metinleri `SmokingContent` içinde hekim onayına hazır
+/// TASLAK olarak yazılmıştır; yayından önce kurucu (aile hekimi) onayından geçer (Spec §2, §6).
 struct JourneyView: View {
     let profile: UserProfile
 

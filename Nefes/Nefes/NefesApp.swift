@@ -11,19 +11,24 @@ struct NefesApp: App {
     let modelContainer: ModelContainer = {
         let schema = Schema([UserProfile.self, SlipRecord.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let container: ModelContainer
         do {
-            return try ModelContainer(for: schema, configurations: [config])
+            container = try ModelContainer(for: schema, configurations: [config])
         } catch {
             // Kalıcı depo açılamadı (ör. şema uyumsuzluğu, bozuk/dolu disk). Çökmek ve tüm
             // oturumu öldürmek yerine bellek-içi depoya düşüyoruz: uygulama çalışır kalır
             // (bu oturumda kayıt kalıcı olmaz). Diskteki veri silinmez, yalnızca yüklenmez.
             print("[Nefes] Kalıcı ModelContainer açılamadı, bellek-içi depoya düşülüyor: \(error)")
             let fallback = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-            if let memoryContainer = try? ModelContainer(for: schema, configurations: [fallback]) {
-                return memoryContainer
+            guard let memoryContainer = try? ModelContainer(for: schema, configurations: [fallback]) else {
+                fatalError("Bellek-içi ModelContainer bile oluşturulamadı: \(error)")
             }
-            fatalError("Bellek-içi ModelContainer bile oluşturulamadı: \(error)")
+            container = memoryContainer
         }
+        #if DEBUG
+        UITestConfig.seedIfNeeded(container)   // App Store ekran görüntüleri için (no-op normalde)
+        #endif
+        return container
     }()
 
     var body: some Scene {
@@ -40,7 +45,12 @@ struct NefesApp: App {
                 // Form'lar dahil) açık görünüme sabitleyerek kontrastı garanti altına alıyoruz.
                 // (Tam koyu-mod desteği için ayrı bir koyu palet gerekir — Faz 2.)
                 .preferredColorScheme(.light)
-                .task { await env.bootstrap() }
+                .task {
+                    await env.bootstrap()
+                    #if DEBUG
+                    if UITestConfig.wantsPremium { env.store.debugOverridePremium = true }
+                    #endif
+                }
         }
         .modelContainer(modelContainer)
     }

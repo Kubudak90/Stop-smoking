@@ -2,11 +2,12 @@ import Foundation
 
 /// Program/Journey (Spec §4.2) + Yoksunluk rehberi & NRT bilgisi (Spec §6) İÇERİĞİ.
 ///
-/// ⚠️ TIBBİ İÇERİK — HEKİM TARAFINDAN DOLDURULACAK:
-/// Aşağıdaki metinler İSKELET/PLACEHOLDER'dır. Kurucu (aile hekimi) tarafından
-/// gözden geçirilip yazılacaktır (asıl hendek — Spec §2). "İyileştirir/garanti" dili
-/// KULLANILMAZ; içerik bilgilendirir ve profesyonele (ALO 171 / poliklinik) yönlendirir
-/// (Spec §6 tıbbi sorumluluk sınırı). Yayından önce her madde hekim onayından geçmelidir.
+/// ⚠️ TIBBİ İÇERİK — HEKİM ONAYINA HAZIR TASLAK:
+/// Aşağıdaki metinler, kılavuz temelli (Sağlık Bakanlığı / WHO çizgisinde) ve
+/// sorumlu bir dille yazılmış TASLAK'tır. Kurucu (aile hekimi) tarafından
+/// yayından önce gözden geçirilip onaylanmalıdır (asıl hendek — Spec §2).
+/// "İyileştirir/garanti" dili KULLANILMAZ; içerik bilgilendirir ve profesyonele
+/// (ALO 171 / sigara bırakma polikliniği) yönlendirir (Spec §6 tıbbi sorumluluk sınırı).
 enum SmokingContent {
 
     // MARK: - Program aşamaları (zaman temelli yolculuk) — Spec §4.2
@@ -30,9 +31,9 @@ enum SmokingContent {
             title: "Hazırlık",
             summary: "Bırakmaya hazırlanmak, başarının yarısıdır. Ortamını ve zihnini hazırla.",
             tips: [
-                "TODO(hekim): Bırakma gününü seç ve evdeki sigara/çakmak/kül tablalarını temizle.",
-                "TODO(hekim): En sık içtiğin 3 anı (tetikleyici) önceden belirle ve alternatif planla.",
-                "TODO(hekim): Yakınlarına haber ver; destek istemek zayıflık değil, strateji."
+                "Bir bırakma günü belirle ve o güne kadar evdeki sigara, çakmak ve kül tablalarını ortadan kaldır. Ortamı sigarasız hale getirmek isteği azaltır.",
+                "En sık sigara içtiğin 3 anı (örneğin kahveyle, telefonda, araçta) önceden yaz ve her biri için alternatif bir davranış planla.",
+                "Yakınlarına bıraktığını söyle. Destek istemek zayıflık değil, bir stratejidir; seninle birlikte bırakan biri olması şansını artırır."
             ],
             isFreeTier: true
         ),
@@ -42,9 +43,9 @@ enum SmokingContent {
             title: "İlk 72 saat",
             summary: "En kritik dönem. Nikotin vücuttan çıkarken istekler yoğun ama kısa sürer.",
             tips: [
-                "TODO(hekim): İstek geldiğinde 4 dakikalık nefes egzersizini kullan (Craving SOS).",
-                "TODO(hekim): Bol su iç, kısa yürüyüşler yap, kafeini azalt.",
-                "TODO(hekim): Bu his geçicidir — her dalga bir öncekinden zayıf."
+                "İstek geldiğinde Craving SOS'taki nefes egzersizini uygula. İstek genellikle birkaç dakikada zirve yapıp geçer.",
+                "Bol su iç, kısa yürüyüşler yap ve kafeini azalt. Bırakma sonrası kafeinin etkisi artabilir.",
+                "İsteği bir dalga gibi düşün: her dalga yükselir ve geçer, üstelik zamanla zayıflar."
             ],
             isFreeTier: true
         ),
@@ -54,8 +55,8 @@ enum SmokingContent {
             title: "İlk 2 hafta",
             summary: "Fiziksel bağımlılık geriler; alışkanlık ve rutin tetikleyicileri öne çıkar.",
             tips: [
-                "TODO(hekim): Rutinlerini değiştir (kahve, mola, yemek sonrası).",
-                "TODO(hekim): Tetikleyici kaydını gözden geçir ve plan kur."
+                "Sigarayla eşleşmiş rutinleri değiştir: kahveni farklı bir yerde iç, yemek sonrası hemen masadan kalk, molanı kısa bir yürüyüşe çevir.",
+                "Tetikleyici kayıtlarını gözden geçir; en çok hangi durumda zorlandığını gör ve o an için önceden somut bir plan hazırla."
             ],
             isFreeTier: false
         ),
@@ -65,8 +66,8 @@ enum SmokingContent {
             title: "1 ay",
             summary: "Yeni normal oturuyor. Öz güven artar; dikkat dağınıklığı/iştah dengelenir.",
             tips: [
-                "TODO(hekim): Biriken parayı somut bir hedefe bağla.",
-                "TODO(hekim): Egzersiz ve nefes kapasitesindeki iyileşmeyi fark et."
+                "Biriken parayı görünür ve somut bir hedefe bağla. Neden biriktirdiğini görmek devam etmek için güçlü bir motivasyon olur.",
+                "Nefes, tat ve koku gibi iyileşmeleri fark et. Küçük kazanımları not etmek kararlılığı besler."
             ],
             isFreeTier: false
         ),
@@ -76,8 +77,8 @@ enum SmokingContent {
             title: "3 ay ve sonrası",
             summary: "Kalıcılık aşaması. Nadir gelen güçlü istekleri yönetmek esastır.",
             tips: [
-                "TODO(hekim): 'Tek sigaradan bir şey olmaz' tuzağına karşı planını hatırla.",
-                "TODO(hekim): Kayma olursa kendini suçlama; kaydet, öğren, devam et (Spec §5)."
+                "'Tek sigaradan bir şey olmaz' düşüncesi en sık nüks nedenidir. Planını ve bıraktığın nedenleri önceden hatırla.",
+                "Kayma olursa kendini suçlama; ne zaman ve neden olduğunu kaydet, öğren ve devam et. Bir kayma tüm ilerlemeni silmez (Spec §5)."
             ],
             isFreeTier: false
         )
@@ -95,18 +96,18 @@ enum SmokingContent {
     static let withdrawalGuide: [WithdrawalItem] = [
         WithdrawalItem(
             symptom: "Sigara isteği (craving)",
-            whatToExpect: "TODO(hekim): İlk günlerde sık ve yoğun; genelde 3-5 dakikada zirve yapıp geçer.",
-            coping: "TODO(hekim): Nefes egzersizi, su, dikkat dağıtma; isteği bir dalga gibi izle."
+            whatToExpect: "İlk günlerde sık ve yoğun olabilir. Tek bir istek genellikle birkaç dakika içinde zirve yapar ve kendiliğinden geçer; ilerleyen günlerde seyrekleşir.",
+            coping: "Nefes egzersizi, bir bardak su, kısa bir yürüyüş veya dikkat dağıtan bir uğraş yardımcı olur. İsteği bastırmaya çalışmak yerine bir dalga gibi geçmesini bekle."
         ),
         WithdrawalItem(
             symptom: "Sinirlilik / huzursuzluk",
-            whatToExpect: "TODO(hekim): İlk 1-2 hafta belirgin; zamanla azalır.",
-            coping: "TODO(hekim): Hafif egzersiz, uyku düzeni, kafein azaltımı."
+            whatToExpect: "İlk 1-2 haftada belirgin olabilir; çoğu kişide birkaç hafta içinde azalır.",
+            coping: "Hafif egzersiz, düzenli uyku ve kafeini azaltmak yardımcı olur. Yoğun ve sürekli sıkıntı halinde hekimine danış."
         ),
         WithdrawalItem(
             symptom: "Konsantrasyon güçlüğü / uyku değişimi",
-            whatToExpect: "TODO(hekim): Geçici; beyin nikotinsiz dengeyi yeniden kurar.",
-            coping: "TODO(hekim): Kısa molalar, düzenli uyku; gerekirse hekime danış."
+            whatToExpect: "Genellikle geçicidir; vücut nikotinsiz dengeye uyum sağladıkça düzelir.",
+            coping: "Gün içinde kısa molalar ver ve uyku düzenini koru. Belirtiler uzun sürer veya günlük yaşamını zorlaştırırsa hekimine danış."
         )
     ]
 
@@ -121,13 +122,16 @@ enum SmokingContent {
     static let supportInfo: [InfoCard] = [
         InfoCard(
             title: "Nikotin replasman tedavisi (NRT)",
-            body: "TODO(hekim): Bant/sakız/pastil hakkında dengeli, tarafsız bilgi. Nefes ilaç önermez; "
-                + "uygunluk ve doz için hekime/eczacıya yönlendirir."
+            body: "Nikotin bandı, sakızı ve pastili gibi nikotin replasman ürünleri, yoksunluk "
+                + "belirtilerini hafifletmeye yardımcı olabilen seçeneklerdir. Uygunluk, ürün tipi ve "
+                + "doz kişiden kişiye değişir. Nefes ilaç önermez; doğru seçim için hekimine veya "
+                + "eczacına danışmanı öneririz."
         ),
         InfoCard(
             title: "Reçeteli destek",
-            body: "TODO(hekim): Bazı kişilerde hekim kontrolünde ilaç desteği faydalı olabilir. "
-                + "Karar ve takip hekime aittir."
+            body: "Bazı kişilerde, hekim değerlendirmesiyle reçeteli ilaç desteği bırakma sürecine "
+                + "katkı sağlayabilir. Bu ilaçların uygunluğu, başlanması ve takibi yalnızca hekim "
+                + "kararıyla olur. Karar ve takip hekime aittir."
         ),
         InfoCard(
             title: "ALO 171 & sigara bırakma poliklinikleri",

@@ -58,9 +58,10 @@ struct OnboardingView: View {
 
     // MARK: - 0. KVKK açık rıza (Spec §17) — hassas sağlık verisi toplanmadan önce
 
-    /// Gizlilik politikası ve kullanım şartları. Yayından önce gerçek URL'lerle değiştirin.
-    static let privacyPolicyURL = URL(string: "https://nefes.app/gizlilik")!
-    static let termsOfUseURL = URL(string: "https://nefes.app/sartlar")!
+    /// Gizlilik politikası ve kullanım şartları (GitHub Pages — repo `docs/` klasörü).
+    /// Kendi domainin (ör. nefes.app) hazır olduğunda bu iki URL'i onunla değiştir.
+    static let privacyPolicyURL = URL(string: "https://kubudak90.github.io/Stop-smoking/gizlilik.html")!
+    static let termsOfUseURL = URL(string: "https://kubudak90.github.io/Stop-smoking/sartlar.html")!
 
     private var consentStep: some View {
         OnboardingScaffold(

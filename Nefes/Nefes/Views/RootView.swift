@@ -25,22 +25,38 @@ struct MainTabView: View {
     @EnvironmentObject private var notifications: NotificationManager
     @Environment(\.scenePhase) private var scenePhase
 
+    @State private var selection = MainTabView.defaultSelection
+
+    /// Normalde Bugün (0). DEBUG ekran görüntüsü modunda istenen sekme.
+    private static var defaultSelection: Int {
+        #if DEBUG
+        return UITestConfig.initialTab
+        #else
+        return 0
+        #endif
+    }
+
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
             CounterView(profile: profile)
                 .tabItem { Label("Bugün", systemImage: "leaf.fill") }
+                .tag(0)
 
             JourneyView(profile: profile)
                 .tabItem { Label("Program", systemImage: "map.fill") }
+                .tag(1)
 
             RecoveryTimelineView(profile: profile)
                 .tabItem { Label("İyileşme", systemImage: "heart.text.square.fill") }
+                .tag(2)
 
             StatsView(profile: profile)
                 .tabItem { Label("İstatistik", systemImage: "chart.bar.fill") }
+                .tag(3)
 
             SettingsView(profile: profile)
                 .tabItem { Label("Ayarlar", systemImage: "gearshape.fill") }
+                .tag(4)
         }
         // Her foreground'da bildirimleri yeniden kur: izin sonradan açıldıysa plan dolar,
         // "geri dönüş kancası" 48 saat ileri ötelenir (Spec §12) ve rozet temizlenir.
