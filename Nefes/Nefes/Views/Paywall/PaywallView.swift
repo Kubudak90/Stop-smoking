@@ -204,14 +204,22 @@ struct PaywallView: View {
     }
 
     private var footer: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             if let error = store.lastError {
                 Text(error).font(.caption2).foregroundStyle(Theme.danger)
             }
-            Text("Abonelik otomatik yenilenir, istediğin zaman App Store'dan iptal edebilirsin. Ödeme Apple hesabından alınır.")
+            Text("Abonelik otomatik yenilenir; dönem bitiminden en az 24 saat önce iptal etmezsen aynı ücretle yenilenir. Varsa ücretsiz deneme süresinin sonunda, seçtiğin planın ücreti Apple hesabından tahsil edilir. İptali istediğin zaman App Store ayarlarından yapabilirsin.")
                 .font(.caption2)
                 .foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.center)
+            // Apple App Store Review 3.1.2 / Schedule 2: auto-renewable subscription
+            // purchase screens must surface functional Terms (EULA) + Privacy Policy links.
+            HStack(spacing: 16) {
+                Link("Gizlilik Politikası", destination: OnboardingView.privacyPolicyURL)
+                Link("Kullanım Şartları (EULA)", destination: OnboardingView.termsOfUseURL)
+            }
+            .font(.caption2.weight(.medium))
+            .foregroundStyle(Theme.primary)
         }
         .padding(.top, 4)
     }

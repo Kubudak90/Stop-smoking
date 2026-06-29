@@ -174,12 +174,19 @@ struct SettingsView: View {
         }
     }
 
+    /// Gerçek yayın sürümü (CFBundleShortVersionString) — sabit "v0.1 (MVP)" yerine,
+    /// 1.0 build'de "v1.0" gösterir (App Store 2.3 metadata tutarlılığı).
+    private var appVersion: String {
+        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        return "v\(v)"
+    }
+
     private var aboutSection: some View {
         Section {
             HStack {
                 Text("Nefes")
                 Spacer()
-                Text("v0.1 (MVP)").foregroundStyle(Theme.textSecondary)
+                Text(appVersion).foregroundStyle(Theme.textSecondary)
             }
             Text("Bir aile hekimi tarafından, Türkiye için tasarlandı.")
                 .font(.caption)

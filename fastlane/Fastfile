@@ -1,0 +1,36 @@
+# Stop-smoking — one-command iOS publishing (fastlane). Shares the account-level App Store
+# Connect API key in ~/eas-secrets (referenced BY PATH; never copied into the repo).
+#
+#   fastlane ios pull      download the live App Store listing (read-only)
+#   fastlane ios beta      build -> TestFlight (does NOT touch the live App Store version)
+#   fastlane ios release   build -> metadata/screenshots -> submit for review
+ASC_KEY_JSON = File.expand_path("~/eas-secrets/asc_api_key.json")
+PROJECT = "Nefes/Nefes.xcodeproj"
+SCHEME  = "Nefes"
+
+platform :ios do
+  desc "Build a signed App Store .ipa"
+  lane :build do
+
+    build_app(project: PROJECT, scheme: SCHEME, export_method: "app-store",
+              output_directory: "build", xcargs: "-allowProvisioningUpdates")
+  end
+
+  desc "Build + upload to TestFlight (separate beta channel; live version untouched)"
+  lane :beta do
+    build
+    upload_to_testflight(api_key_path: ASC_KEY_JSON, skip_waiting_for_build_processing: true)
+  end
+
+  desc "Build + push metadata/screenshots + submit for App Store review"
+  lane :release do
+    build
+    deliver(api_key_path: ASC_KEY_JSON, submit_for_review: true, automatic_release: true,
+            force: true, run_precheck_before_submit: false)
+  end
+
+  desc "Download the live App Store listing (read-only)"
+  lane :pull do
+    sh("cd .. && fastlane deliver download_metadata --api_key_path #{ASC_KEY_JSON} -a com.nefes.app")
+  end
+end
