@@ -9,11 +9,13 @@ PROJECT = "Nefes/Nefes.xcodeproj"
 SCHEME  = "Nefes"
 
 platform :ios do
-  desc "Build a signed App Store .ipa"
-  lane :build do
+  P8   = File.expand_path("~/eas-secrets/AuthKey_B5KA5HPZ8L.p8")
+  AUTH = "-allowProvisioningUpdates -authenticationKeyPath #{P8} -authenticationKeyID B5KA5HPZ8L -authenticationKeyIssuerID fe1d0eff-62b6-41a9-8938-dce2f708344c"
 
+  desc "Build a signed App Store .ipa (headless signing via API key + the on-machine Apple Distribution cert)"
+  lane :build do
     build_app(project: PROJECT, scheme: SCHEME, export_method: "app-store",
-              output_directory: "build", xcargs: "-allowProvisioningUpdates")
+              output_directory: "build", xcargs: AUTH)
   end
 
   desc "Build + upload to TestFlight (separate beta channel; live version untouched)"
