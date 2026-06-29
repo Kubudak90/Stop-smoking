@@ -1,92 +1,133 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nefes — Gizlilik Politikası (KVKK)</title>
-<style>
-  :root { --teal:#16A394; --dark:#0E7A6E; --ink:#14201E; --muted:#5E6B68; }
-  * { box-sizing:border-box; }
-  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-         color:var(--ink); line-height:1.65; margin:0; background:#F6F8F7; }
-  .wrap { max-width:760px; margin:0 auto; padding:32px 22px 80px; }
-  header { background:linear-gradient(135deg,var(--teal),var(--dark)); color:#fff;
-           padding:40px 22px; }
-  header .wrap { padding-bottom:0; }
-  h1 { margin:0 0 6px; font-size:26px; }
-  header p { margin:0; opacity:.92; }
-  h2 { color:var(--dark); margin-top:34px; font-size:19px; }
-  a { color:var(--teal); }
-  .muted { color:var(--muted); font-size:14px; }
-  .note { background:#fff; border:1px solid #e3eae8; border-radius:14px; padding:16px 18px; margin:18px 0; }
-  ul { padding-left:20px; }
-  footer { border-top:1px solid #e3eae8; margin-top:40px; padding-top:18px; }
-</style>
-</head>
-<body>
-<header><div class="wrap"><h1>Gizlilik Politikası</h1><p>Nefes — Sigarayı Bırakma Uygulaması</p></div></header>
-<div class="wrap">
-
-<p class="muted">Yürürlük tarihi: [GÜNCELLE — ör. 1 Temmuz 2026] · Son güncelleme: [GÜNCELLE]</p>
-
-<div class="note"><strong>Özet:</strong> Nefes <strong>offline-first</strong> bir uygulamadır. Girdiğin tüm
-bilgiler <strong>yalnızca cihazında</strong> saklanır; sunucularımıza gönderilmez. Reklam yoktur, üçüncü taraf
-izleme (analytics) yoktur.</div>
-
-<h2>1. Veri Sorumlusu</h2>
-<p>Bu uygulama, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında veri sorumlusu sıfatıyla
-[VERİ SORUMLUSU ADI / UNVANI] tarafından sunulmaktadır. İletişim: <a href="mailto:[E-POSTA]">[E-POSTA]</a>.</p>
-
-<h2>2. Hangi Verileri İşliyoruz</h2>
-<p>Hizmeti sunmak için uygulamaya senin girdiğin bilgiler işlenir:</p>
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gizlilik Politikası — Nefes</title><style>:root{--ac:#2f9e8f;--ink:#1a2421;--soft:#5b6b66;--bg:#f6f8f7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}.wrap{max-width:720px;margin:0 auto;padding:32px 20px 64px}header{display:flex;align-items:center;gap:10px;margin-bottom:24px}.logo{width:34px;height:34px;border-radius:9px;background:var(--ac);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}h1{font-size:27px;margin:0 0 6px}h2{font-size:20px;margin:26px 0 8px;color:var(--ac)}h3{font-size:17px;margin:18px 0 6px}p{margin:10px 0}ul,ol{margin:10px 0;padding-left:22px}li{margin:4px 0}a{color:var(--ac)}hr{border:none;border-top:1px solid #e3e9e7;margin:24px 0}.card{background:#fff;border:1px solid #e7edeb;border-radius:16px;padding:24px}nav{margin-top:26px;font-size:14px}nav a{margin-right:14px}</style></head><body><div class="wrap"><header><div class="logo">N</div><strong>Nefes</strong></header><div class="card"><h1>Nefes — Gizlilik Politikası</h1>
+<p><strong>Son güncelleme:</strong> 29 Haziran 2026</p>
+<p><strong>Uygulama:</strong> Nefes — Sigara Bırakma Takip Uygulaması</p>
+<p><strong>Sürüm:</strong> 1.0</p>
+<p><strong>Paket kimliği (Bundle ID):</strong> com.nefes.app</p>
+<p><strong>Platform:</strong> Apple iOS / iPadOS</p>
+<hr>
+<h2>1. Özet (kısa versiyon)</h2>
+<p>Nefes, <strong>"cihazda kalır" (offline-first)</strong> ilkesiyle tasarlanmıştır.</p>
 <ul>
-  <li>Bırakma tarihi/saati, günlük tüketim ve sigara fiyatı/marka bilgisi (sayaç hesapları için),</li>
-  <li>Bırakma nedenlerin (motivasyon notları),</li>
-  <li>Kayma (slip) kayıtları: zaman, tetikleyici ve duygu seçimi, isteğe bağlı not,</li>
-  <li>Bildirim ve uygulama tercihlerin.</li>
+<li>Girdiğin tüm bilgiler (sigara kullanımın, kaymaların, motivasyonların, ilerlemen) <strong>yalnızca kendi cihazında</strong> saklanır.</li>
+<li><strong>Hiçbir sağlık veriniz veya kişisel veriniz bizim sunucularımıza ya da herhangi bir üçüncü tarafa gönderilmez.</strong></li>
+<li><strong>Reklam yoktur, analitik (analytics) yoktur, üçüncü taraf takip (tracking) yoktur.</strong> Uygulamada Facebook, Google Analytics, Firebase, reklam ağı vb. hiçbir takip/SDK bulunmaz.</li>
+<li>Tüm bildirimler <strong>cihaz üzerinde yerel olarak</strong> planlanır; uzak sunucu (push) kullanılmaz.</li>
+<li>İstediğin an, tek dokunuşla <strong>tüm verini kalıcı olarak silebilirsin.</strong></li>
 </ul>
-<p>Sigara kullanımıyla ilgili bilgiler KVKK kapsamında <strong>sağlıkla ilişkili özel nitelikli (hassas)
-kişisel veri</strong> olabilir. Bu veriler yalnızca <strong>açık rızanla</strong>, yalnızca cihazında ve
-yalnızca hizmeti sana sunmak amacıyla işlenir.</p>
-
-<h2>3. Verilerin Saklanması ve Aktarımı</h2>
+<p>Bu politika, bu ilkeleri ve Kişisel Verilerin Korunması Kanunu (KVKK) ile App Store gereksinimleri kapsamındaki haklarını ayrıntılı olarak açıklar.</p>
+<hr>
+<h2>2. Veri Sorumlusu ve İletişim</h2>
+<p>Bu uygulamanın geliştiricisi, KVKK kapsamında <strong>veri sorumlusu</strong> sıfatını taşır.</p>
 <ul>
-  <li>Tüm veriler cihazının yerel deposunda (Apple SwiftData) tutulur.</li>
-  <li>Verilerini <strong>sunucularımıza aktarmayız</strong>, satmayız, pazarlama amacıyla kullanmayız.</li>
-  <li>Reklam ağı ve üçüncü taraf analiz/izleme aracı kullanmıyoruz.</li>
+<li><strong>İletişim e-postası:</strong> support@nefes.app</li>
 </ul>
-
-<h2>4. Üçüncü Taraflar</h2>
-<p>Abonelik satın alımları Apple App Store (StoreKit) üzerinden yapılır; ödeme ve abonelik verileri Apple
-tarafından, Apple’ın gizlilik politikası kapsamında işlenir. Bu işlemlere ait kart/ödeme bilgisine erişimimiz
-yoktur. Bildirimler cihazında yerel olarak üretilir.</p>
-
-<h2>5. İşleme Amacı ve Hukuki Sebep</h2>
-<p>Veriler; sayaç ve iyileşme takvimini hesaplamak, sana destekleyici bildirim göstermek ve premium özellikleri
-sunmak için işlenir. Hukuki sebep, KVKK m.5/m.6 uyarınca <strong>açık rıza</strong> ve sözleşmenin ifasıdır.</p>
-
-<h2>6. Saklama Süresi ve Silme</h2>
-<p>Veriler, sen silene kadar cihazında kalır. İstediğin an <strong>Ayarlar → “Tüm verilerimi sil”</strong>
-ile kalıcı olarak silebilirsin. Uygulamayı cihazından kaldırman da yerel verilerini siler.</p>
-
-<h2>7. KVKK Kapsamındaki Haklarınız (m.11)</h2>
-<p>Kişisel verilerine ilişkin olarak bilgi talep etme, düzeltme, silme ve işlemeye itiraz hakların vardır.
-Veriler yalnızca cihazında tutulduğundan bu haklarını doğrudan uygulama içinden kullanabilir; ayrıca
-yukarıdaki e-posta üzerinden bize başvurabilirsin.</p>
-
-<h2>8. Tıbbi Sorumluluk Reddi</h2>
-<p>Nefes bir bilgilendirme ve takip aracıdır; tıbbi tanı veya tedavi sağlamaz, hekim muayenesinin yerine
-geçmez. Sağlık kararları için hekimine veya <strong>ALO 171 Sigara Bırakma Danışma Hattı</strong>’na başvur.</p>
-
-<h2>9. Çocukların Gizliliği</h2>
-<p>Uygulama yetişkinlere yöneliktir ve 18 yaşından küçüklerden bilerek veri toplamaz.</p>
-
-<h2>10. Değişiklikler</h2>
-<p>Bu politika güncellenebilir; güncel sürüm her zaman bu sayfada yayımlanır.</p>
-
-<footer class="muted">
-  <p>İletişim: <a href="mailto:[E-POSTA]">[E-POSTA]</a> · <a href="./sartlar.html">Kullanım Şartları</a></p>
-</footer>
-</div>
-</body>
-</html>
+<p>Gizlilikle ilgili her türlü soru, talep veya KVKK başvurusu için bu adrese yazabilirsiniz.</p>
+<hr>
+<h2>3. Hangi Verileri İşliyoruz?</h2>
+<p>Aşağıdaki veriler <strong>yalnızca cihazınızda</strong> oluşturulur ve saklanır. Bunlar cihazınızdan dışarı çıkmaz.</p>
+<h3>3.1. Profil bilgileri (sizin girdikleriniz)</h3>
+<ul>
+<li>Bırakmak istediğiniz alışkanlık türü (uygulamada sabit: sigara)</li>
+<li>Bırakma nedenleriniz / motivasyonlarınız (serbest metin)</li>
+<li>Günde içtiğiniz sigara sayısı</li>
+<li>Paket fiyatı ve pakette bulunan sigara sayısı</li>
+<li>(İsteğe bağlı) sigara markanız</li>
+<li>Bırakma tarihiniz ve profil oluşturma tarihiniz</li>
+<li>"Hâlâ temizim" check-in zamanlarınız</li>
+<li>KVKK açık rıza onayınızın zaman damgası</li>
+</ul>
+<h3>3.2. Kayma (slip) kayıtları</h3>
+<ul>
+<li>Kayma tarihi</li>
+<li>İçilen sigara sayısı</li>
+<li>Tetikleyici kategorisi (ör. stres, sosyal ortam)</li>
+<li>Duygu durumu</li>
+<li>Serbest notunuz ("ne zaman, nerede")</li>
+</ul>
+<h3>3.3. Davranışsal uygulama bayrakları (UserDefaults)</h3>
+<ul>
+<li>Craving SOS özelliğini ilk kez kullanıp kullanmadığınız</li>
+<li>Tanıtım sonrası abonelik ekranını görüp görmediğiniz</li>
+</ul>
+<p>Bu iki bayrak, yalnızca uygulamanın akışını yönetmek için kullanılan teknik işaretlerdir; reklam veya takip amacıyla kullanılmaz. (Apple "Required Reason API" beyanı: UserDefaults — CA92.1.)</p>
+<h3>3.4. Sağlık verisi niteliği (özel nitelikli kişisel veri)</h3>
+<p>Sigara kullanım alışkanlığınız ve kayma kayıtlarınız KVKK kapsamında <strong>özel nitelikli (hassas) sağlık verisi</strong> olabilir. Bu nedenle bu veriler <strong>yalnızca cihazınızda işlenir ve sizden onboarding (kurulum) aşamasında alınan açık rızaya dayanılarak</strong> kaydedilir.</p>
+<h3>3.5. İşlemediğimiz / toplamadığımız veriler</h3>
+<ul>
+<li>Ad, soyad, e-posta, telefon numarası, kimlik bilgisi <strong>toplanmaz</strong> (hesap sistemi yoktur).</li>
+<li>Konum, kişiler, kamera, mikrofon, fotoğraf verisi <strong>kullanılmaz.</strong></li>
+<li>Apple Sağlık (HealthKit) verisine <strong>erişilmez.</strong></li>
+<li>Reklam kimliği (IDFA) veya başka bir takip tanımlayıcısı <strong>kullanılmaz.</strong></li>
+<li>Hiçbir kullanım/analitik verisi <strong>toplanmaz veya gönderilmez.</strong></li>
+</ul>
+<hr>
+<h2>4. Verileri Hangi Amaçla ve Hangi Hukuki Dayanakla İşliyoruz?</h2>
+<p>| Veri | Amaç | KVKK Hukuki Dayanağı |</p>
+<p>|------|------|----------------------|</p>
+<p>| Sigara kullanımı, kaymalar (sağlık verisi) | Bırakma sürecinizi takip etmek, sayaç/istatistik/iyileşme takvimi sunmak | <strong>Açık rıza</strong> (KVKK m.6) |</p>
+<p>| Profil/fiyat bilgileri | Biriken para, içilmeyen sigara gibi hesaplamalar | Açık rıza ve sözleşmenin ifası (hizmetin sunulması) (KVKK m.5/2-c) |</p>
+<p>| Davranışsal bayraklar | Uygulama akışını ve özellik gösterimini yönetmek | Meşru menfaat (KVKK m.5/2-f) |</p>
+<p>| Yerel bildirim zamanlamaları | Destekleyici hatırlatma ve kutlama bildirimleri göstermek | Açık rıza (bildirim izni) |</p>
+<p>Açık rızanızı <strong>istediğiniz zaman geri çekebilirsiniz</strong>; bunu verilerinizi silerek ve/veya bildirim iznini kapatarak yapabilirsiniz (bkz. Bölüm 8 ve 9).</p>
+<hr>
+<h2>5. Üçüncü Taraflar ve Veri Aktarımı</h2>
+<p>Nefes, kişisel verilerinizi <strong>hiçbir üçüncü tarafla paylaşmaz ve yurt içine veya yurt dışına aktarmaz</strong>, çünkü verileriniz cihazınızdan dışarı çıkmaz.</p>
+<p>İlgili olabilecek tek taraf, işletim sistemi ve mağaza sağlayıcısı olarak <strong>Apple</strong>'dır:</p>
+<ul>
+<li><strong>Apple — App Store / StoreKit (abonelikler):</strong> Premium aboneliği satın aldığınızda veya geri yüklediğinizde, ödeme işlemi tamamen <strong>Apple altyapısı (StoreKit 2)</strong> üzerinden yürütülür. Kredi kartı/ödeme bilgilerinizi <strong>biz görmeyiz, almayız ve saklamayız.</strong> Bu işlemler Apple'ın kendi gizlilik politikasına tabidir. Uygulama, yalnızca aboneliğinizin etkin olup olmadığını (premium hak sahipliği) cihaz üzerinden öğrenir.</li>
+</ul>
+<p>Bunun dışında uygulamada <strong>hiçbir analitik, reklam, bulut senkronizasyonu (CloudKit dahil) veya üçüncü taraf SDK bulunmamaktadır.</strong></p>
+<p>&gt; Not: Uygulama, gelecekte sigara paketi fiyat tablosunu güncel tutmak için isteğe bağlı olarak yalnızca <strong>HTTPS</strong> üzerinden genel (kişisel olmayan) bir fiyat listesi indirebilecek şekilde tasarlanmıştır. Bu özellik mevcut sürümde <strong>kapalıdır</strong> ve etkinleştirildiğinde dahi yalnızca veri <strong>indirir</strong>; hiçbir kişisel veriniz <strong>gönderilmez.</strong></p>
+<hr>
+<h2>6. Veri Saklama Süresi</h2>
+<ul>
+<li>Verileriniz, <strong>siz silene</strong> veya <strong>uygulamayı cihazınızdan kaldırana</strong> kadar yalnızca cihazınızda saklanır.</li>
+<li>Sunucu tarafında hiçbir kopya tutulmadığı için, bizim tarafımızda silinecek/saklanacak bir veri bulunmaz.</li>
+<li>Uygulamayı silmeniz, cihazdaki uygulama verisinin de silinmesine yol açar.</li>
+</ul>
+<hr>
+<h2>7. KVKK Kapsamındaki Haklarınız</h2>
+<p>KVKK m.11 uyarınca aşağıdaki haklara sahipsiniz:</p>
+<ul>
+<li>Kişisel verinizin işlenip işlenmediğini öğrenme,</li>
+<li>İşlenmişse buna ilişkin bilgi talep etme,</li>
+<li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+<li>Eksik/yanlış işlenmişse düzeltilmesini isteme,</li>
+<li>Silinmesini veya yok edilmesini isteme,</li>
+<li>İşlemenin münhasıran otomatik sistemlerce analizi sonucu aleyhinize bir sonuç çıkmasına itiraz etme,</li>
+<li>Verilerinizin kanuna aykırı işlenmesi sebebiyle zarara uğramanız hâlinde giderim talep etme.</li>
+</ul>
+<p>Verileriniz tamamen cihazınızda olduğundan; <strong>görüntüleme, düzeltme ve silme</strong> haklarınızı doğrudan uygulama içinden anında kullanabilirsiniz. Diğer talepleriniz için support@nefes.app adresine başvurabilirsiniz.</p>
+<hr>
+<h2>8. Hesap ve Veri Silme</h2>
+<p>Nefes'te <strong>hesap/üyelik sistemi yoktur</strong>; bir hesap oluşturmazsınız.</p>
+<p>Tüm verilerinizi kalıcı olarak silmek için:</p>
+<ol>
+<li>Uygulamada <strong>Ayarlar</strong> ekranını açın.</li>
+<li><strong>Gizlilik (KVKK)</strong> bölümünde <strong>"Tüm verilerimi sil"</strong> seçeneğine dokunun.</li>
+<li>Onay verdiğinizde; profiliniz, tüm kayma kayıtlarınız, ilerlemeniz ve davranışsal bayraklar <strong>cihazdan kalıcı olarak silinir.</strong> Bu işlem geri alınamaz.</li>
+</ol>
+<p>Alternatif olarak uygulamayı cihazınızdan kaldırarak (silerek) de uygulama verisini temizleyebilirsiniz.</p>
+<p>&gt; Aboneliğinizi iptal etmek, verinizi silmekten ayrı bir işlemdir ve <strong>Apple Kimliği &gt; Abonelikler</strong> üzerinden yapılır (bkz. Bölüm 10).</p>
+<hr>
+<h2>9. Bildirimler</h2>
+<p>Nefes, destekleyici hatırlatmalar ve kilometre taşı kutlamaları için bildirim gösterir. Tüm bildirimler <strong>cihaz üzerinde yerel olarak</strong> planlanır; uzaktan (push) bildirim, cihaz token'ı veya sunucu kullanılmaz. Bildirimlere izin vermek tamamen size bağlıdır ve iOS <strong>Ayarlar &gt; Bildirimler &gt; Nefes</strong> üzerinden izni dilediğiniz zaman kapatabilirsiniz.</p>
+<hr>
+<h2>10. Abonelikler (Premium)</h2>
+<p>Uygulama, isteğe bağlı <strong>Premium</strong> aboneliği sunar (aylık ve yıllık). Satın alma, yenileme, iptal ve geri ödeme işlemleri <strong>Apple App Store</strong> üzerinden yürütülür ve Apple'ın koşullarına tabidir. Aboneliğinizi yönetmek/iptal etmek için: <strong>iOS Ayarlar &gt; [Apple Kimliğiniz] &gt; Abonelikler.</strong></p>
+<hr>
+<h2>11. Çocukların Gizliliği</h2>
+<p>Nefes, sigara bırakmak isteyen yetişkinlere yöneliktir ve çocuklara yönelik değildir. Bilerek 18 yaş altından kişisel veri toplamayız. Zaten hiçbir kişisel veriyi cihaz dışına aktarmayız.</p>
+<hr>
+<h2>12. Veri Güvenliği</h2>
+<p>Verileriniz cihazınızda, işletim sisteminin uygulama korumalı alanı (sandbox) içinde saklanır ve cihazınızın kilit/şifreleme korumalarından yararlanır. Uzak içerik (varsa) yalnızca <strong>HTTPS</strong> üzerinden alınır. Verileriniz cihaz dışına aktarılmadığı için ağ üzerinden sızma riski en aza indirilmiştir. Cihazınızı bir parola/Face ID ile korumanızı öneririz.</p>
+<hr>
+<h2>13. Tıbbi Uyarı</h2>
+<p>Nefes bir takip ve motivasyon aracıdır; <strong>tıbbi tavsiye, teşhis veya tedavi yerine geçmez.</strong> Yoksunluk zorlaştığında ücretsiz ve gizli <strong>ALO 171 Sigara Bırakma Danışma Hattı</strong>'ndan veya bir sağlık kuruluşundan destek alabilirsiniz.</p>
+<hr>
+<h2>14. Politika Değişiklikleri</h2>
+<p>Bu politikada değişiklik yaparsak, güncel sürümü uygulama içinden erişilebilen bağlantıda yayımlarız ve "Son güncelleme" tarihini değiştiririz. Önemli değişikliklerde uygulama içinde bilgilendirme yapılabilir.</p>
+<hr>
+<h2>15. İletişim</h2>
+<p>Sorularınız ve KVKK talepleriniz için:</p>
+<p><strong>E-posta:</strong> support@nefes.app</p></div><nav><a href="index.html">Ana sayfa</a><a href="gizlilik.html">Gizlilik</a><a href="sartlar.html">Şartlar</a><a href="destek.html">Destek</a></nav></div></body></html>
