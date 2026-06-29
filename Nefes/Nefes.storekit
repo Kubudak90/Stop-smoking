@@ -32,7 +32,7 @@
               "locale" : "tr_TR"
             }
           ],
-          "productID" : "com.nefes.app.premium.yearly",
+          "productID" : "com.nefesapp.ios.premium.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Nefes Premium Yıllık",
           "subscriptionGroupID" : "NEFES_PREMIUM_GROUP",
@@ -53,7 +53,7 @@
               "locale" : "tr_TR"
             }
           ],
-          "productID" : "com.nefes.app.premium.monthly",
+          "productID" : "com.nefesapp.ios.premium.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Nefes Premium Aylık",
           "subscriptionGroupID" : "NEFES_PREMIUM_GROUP",

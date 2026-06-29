@@ -31,22 +31,23 @@ platform :ios do
 
   desc "Download the live App Store listing (read-only)"
   lane :pull do
-    sh("cd .. && fastlane deliver download_metadata --api_key_path #{ASC_KEY_JSON} -a com.nefes.app")
+    sh("cd .. && fastlane deliver download_metadata --api_key_path #{ASC_KEY_JSON} -a com.nefesapp.ios")
   end
 
-  desc "Create the App Store Connect app record (one-time)"
-  lane :create_app do
+  desc "Register the com.nefesapp.ios Bundle ID in the Developer Portal (so it appears in App Store Connect's New App dropdown)"
+  lane :register_id do
     app_store_connect_api_key(
       key_id: "B5KA5HPZ8L",
       issuer_id: "fe1d0eff-62b6-41a9-8938-dce2f708344c",
       key_filepath: File.expand_path("~/eas-secrets/AuthKey_B5KA5HPZ8L.p8"),
     )
     produce(
-      app_identifier: "com.nefes.app",
+      app_identifier: "com.nefesapp.ios",
       app_name: "Nefes: Sigara Bırakma",
       language: "Turkish",
       sku: "nefes-app-2026",
       platforms: ["ios"],
+      skip_itc: true, # only register the App ID in the Developer Portal; skip the web-session app creation
     )
   end
 end

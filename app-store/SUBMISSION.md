@@ -26,7 +26,7 @@ Bu belge, uygulamayı App Store'a göndermek için gereken tüm değerleri ve ad
 1. `Nefes/Nefes.xcodeproj`'i Xcode'da aç.
 2. **Nefes target → Signing & Capabilities** sekmesi.
 3. **Team**: kendi Apple Developer takımını seç (otomatik imzalama açık kalsın).
-4. Bundle Identifier: `com.nefes.app` (gerekirse App Store Connect'te bu ID müsait olmalı; değilse benzersiz bir ID seç ve hem burada hem `.storekit`/StoreManager'da güncelle).
+4. Bundle Identifier: `com.nefesapp.ios` (gerekirse App Store Connect'te bu ID müsait olmalı; değilse benzersiz bir ID seç ve hem burada hem `.storekit`/StoreManager'da güncelle).
 5. Capability eklemeye **gerek yok**: In-App Purchase entitlement gerektirmez; yalnızca yerel bildirim kullanılıyor (push yok).
 
 ---
@@ -40,7 +40,7 @@ App Store Connect → **My Apps → +** → New App
 | Platform | iOS |
 | Name | **Nefes: Sigara Bırakma** (30 karakter sınırı; bkz. §6 alternatifler) |
 | Primary Language | Turkish (Türkçe) |
-| Bundle ID | `com.nefes.app` |
+| Bundle ID | `com.nefesapp.ios` |
 | SKU | `nefes-ios-001` (serbest, benzersiz) |
 | User Access | Full |
 
@@ -60,8 +60,8 @@ App Store Connect → uygulama → **Subscriptions** → yeni **Subscription Gro
 
 | Ürün | Product ID | Süre | Fiyat (öneri) | Deneme |
 |---|---|---|---|---|
-| Yıllık Premium | `com.nefes.app.premium.yearly` | 1 yıl | ~699,99 ₺ | 3 gün ücretsiz |
-| Aylık Premium | `com.nefes.app.premium.monthly` | 1 ay | ~149,99 ₺ | yok |
+| Yıllık Premium | `com.nefesapp.ios.premium.yearly` | 1 yıl | ~699,99 ₺ | 3 gün ücretsiz |
+| Aylık Premium | `com.nefesapp.ios.premium.monthly` | 1 ay | ~149,99 ₺ | yok |
 
 Her ürün için Türkçe yerelleştirme (localizations):
 - **Yıllık** — Görünen ad: `Yıllık Premium` · Açıklama: `Tüm program, Craving SOS, tetikleyici yönetimi ve tam iyileşme takvimi`
@@ -97,7 +97,7 @@ Simülatörden çekmek için (Claude bunu otomatikleştirebilir):
 ```
 xcrun simctl boot "iPhone 17 Pro Max"
 xcrun simctl install booted <Nefes.app yolu>
-xcrun simctl launch booted com.nefes.app
+xcrun simctl launch booted com.nefesapp.ios
 xcrun simctl io booted screenshot ~/Desktop/nefes-01.png
 ```
 Önerilen kareler: ① canlı sayaç, ② iyileşme takvimi, ③ Craving SOS nefes egzersizi, ④ kayma kaydı (azarlamayan), ⑤ paywall (para karşılaştırması).

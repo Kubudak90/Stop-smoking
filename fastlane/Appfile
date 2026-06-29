@@ -1,2 +1,2 @@
 # Stop-smoking — iOS bundle id. Team is driven by the project's own DEVELOPMENT_TEAM.
-app_identifier("com.nefes.app")
+app_identifier("com.nefesapp.ios")

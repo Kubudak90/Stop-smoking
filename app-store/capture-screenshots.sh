@@ -6,7 +6,7 @@ set -e
 
 UDID="${1:-800D14D4-7398-4C97-A889-52FC760BD1C3}"   # iPhone 17 Pro Max
 APP="${2:-/tmp/nefes-dd/Build/Products/Debug-iphonesimulator/Nefes.app}"
-BUNDLE="com.nefes.app"
+BUNDLE="com.nefesapp.ios"
 OUT="$(cd "$(dirname "$0")" && pwd)/screenshots"
 mkdir -p "$OUT"
 

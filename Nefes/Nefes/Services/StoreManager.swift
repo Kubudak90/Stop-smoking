@@ -11,8 +11,8 @@ final class StoreManager: ObservableObject {
 
     /// Ürün id'leri. App Store Connect ve Nefes.storekit ile eşleşmeli.
     enum ProductID {
-        static let yearly = "com.nefes.app.premium.yearly"
-        static let monthly = "com.nefes.app.premium.monthly"
+        static let yearly = "com.nefesapp.ios.premium.yearly"
+        static let monthly = "com.nefesapp.ios.premium.monthly"
         static let all = [yearly, monthly]
     }
 

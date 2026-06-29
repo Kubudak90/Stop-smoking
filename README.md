@@ -87,7 +87,7 @@ geçmez; ALO 171 ve sigara bırakma polikliniklerine **köprü** olur.
 
 ## Yol haritası (sonraki)
 
-- StoreKit ürün ID'lerini App Store Connect'te oluşturmak (`com.nefes.app.premium.*`)
+- StoreKit ürün ID'lerini App Store Connect'te oluşturmak (`com.nefesapp.ios.premium.*`)
 - Uygulama ikonu ve App Store görselleri (ASO)
 - Paywall A/B varyantları (altyapı `PaywallView.Context` ile hazır)
 - Faz 2: ikinci alışkanlık config'i, opsiyonel Supabase senkronu, topluluk
